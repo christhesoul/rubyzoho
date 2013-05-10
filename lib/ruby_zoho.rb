@@ -20,7 +20,7 @@ module RubyZoho
   end
 
   def self.configure
-    self.configuration ||= Configuration.new
+    self.configuration = Configuration.new
     yield(configuration) if block_given?
     self.configuration.crm_modules ||= []
     self.configuration.crm_modules = %w[Accounts Calls Contacts Events Leads Potentials Tasks].concat(
