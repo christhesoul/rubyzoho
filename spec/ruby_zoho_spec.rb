@@ -20,6 +20,8 @@ describe RubyZoho::Crm do
   end
 
   it 'should add accessors using a list of names' do
+    pp __LINE__
+    pp RubyZoho::Crm::Contact.methods
     c = RubyZoho::Crm::Contact.new
     c.first_name = 'Raj'
     c.first_name.should eq('Raj')
@@ -170,6 +172,7 @@ describe RubyZoho::Crm do
   end
 
   it 'should get a list of events' do
+    pending
     r = RubyZoho::Crm::Event.all
     r.map { |r| r.class.should eq(RubyZoho::Crm::Event) } unless r.nil?
     r.map { |e| e.id.should eq(e.eventid)}
@@ -280,6 +283,7 @@ describe RubyZoho::Crm do
   end
 
   it 'should save an task record related to an account' do
+    pp RubyZoho::Crm::Account.methods
     a = RubyZoho::Crm::Account.all.first
     e = RubyZoho::Crm::Task.new(
         :task_owner =>  a.account_owner,
@@ -303,10 +307,9 @@ describe RubyZoho::Crm do
 
   it 'should get tasks by user' do
     pending
-    pp u = RubyZoho::Crm::User.all.first
-    pp tasks = RubyZoho::Crm::Task.find_by_smownerid(u.id)
-    pp tasks = RubyZoho::Crm::Task.all
-    tasks.map { |t| RubyZoho::Crm::Task.delete(t.activityid)} unless tasks.nil?
+    pp task_owner = RubyZoho::Crm::Task.first.task_owner
+    pp tasks = RubyZoho::Crm::Task.find_by_task_owner(task_owner)
+    #tasks.map { |t| RubyZoho::Crm::Task.delete(t.activityid)} unless tasks.nil?
   end
 
   it 'should sort contact records' do

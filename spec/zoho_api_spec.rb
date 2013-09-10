@@ -20,11 +20,12 @@ describe ZohoApi do
   end
 
   def init_api(api_key, base_path, modules)
+    ignore_fields = true
     if File.exists?(File.join(base_path, 'fields.snapshot'))
       fields = YAML.load(File.read(File.join(base_path, 'fields.snapshot')))
-      zoho = ZohoApi::Crm.new(api_key, modules, fields)
+      zoho = ZohoApi::Crm.new(api_key, modules, ignore_fields, fields)
     else
-      zoho = ZohoApi::Crm.new(api_key, modules)
+      zoho = ZohoApi::Crm.new(api_key, modules, ignore_fields)
       fields = zoho.module_fields
       File.open(File.join(base_path, 'fields.snapshot'), 'wb') { |file| file.write(fields.to_yaml) }
     end
@@ -57,16 +58,13 @@ describe ZohoApi do
   
   it 'should add a new event' do
     pending
-    h = { :event_owner => 'Wayne Giles',
-          :smownerid => '748054000000056023',
-          :start_datetime => '2013-02-16 16:00:00',
-          :end_datetime => '2014-02-16 16:00:00',
-          :subject => 'Test Event',
-          :related_to => 'Potential One',
-          :relatedtoid => '748054000000123057',
-          :semodule => 'Potentials',
-          :contact_name => 'Wayne Smith',
-          :contactid => '748054000000097043' }
+    pp @zoho.fields_from_api('Events')
+    pp @zoho.fields_from_record('Events')
+    pp @zoho.some('Events')
+    h = { :subject => 'Test Event',
+          :start_datetime => '2014-02-16 16:00:00',
+          :end_datetime => '2014-02-16 18:00:00'
+    }
     @zoho.add_record('Events', h)
     events = @zoho.some('Events')
     pp events
@@ -160,6 +158,13 @@ describe ZohoApi do
     r.count.should be >= 7
   end
 
+  it 'should get a list of local and remote fields' do
+    pending
+    @zoho.fields('Accounts')
+    pp r = @zoho.fields_original('Accounts')
+    r.count.should >= 10
+  end
+
   it 'should retrieve records by module name' do
     r = @zoho.some('Contacts')
     r.should_not eq(nil)
@@ -238,6 +243,13 @@ describe ZohoApi do
     changed_contact = @zoho.find_records('Contacts', :email, '=', h_changed[:email])
     changed_contact[0][:email].should eq(h_changed[:email])
     @zoho.delete_record('Contacts', contact[0][:contactid])
+  end
+
+  it 'should validate that a field name is clean' do
+    @zoho.clean_field_name?(nil).should eq(false)
+    @zoho.clean_field_name?('Name').should eq(true)
+    @zoho.clean_field_name?('Full_Name').should eq(true)
+    @zoho.clean_field_name?('Name (All Upper)').should eq(false)
   end
 
 end
