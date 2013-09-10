@@ -28,7 +28,7 @@ module ZohoApi
 
     def initialize(auth_token, modules, ignore_fields, fields = nil)
       @auth_token = auth_token
-      @modules = %w(Accounts Contacts Events Leads Potentials Tasks Users).concat(modules).uniq
+      @modules = %w(Accounts Contacts Events Leads Potentials Tasks Users Events Cases Calls).concat(modules).uniq
       @module_fields = fields.nil? ? reflect_module_fields : fields
       @ignore_fields = ignore_fields
     end
@@ -200,7 +200,8 @@ module ZohoApi
           'Vendors' => %w(vendorid vendorname),
           'Tasks' => %w(taskid),
           'Events' => %w(eventid),
-          'Notes' => %w(notesid)
+          'Notes' => %w(notesid),
+          'Calls' => %w(callid)
       }
       valid_relationships[module_name].index(field.downcase)
     end
