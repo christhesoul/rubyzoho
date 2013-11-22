@@ -28,7 +28,7 @@ module ZohoApi
 
     def initialize(auth_token, modules, ignore_fields, fields = nil)
       @auth_token = auth_token
-      @modules = %w(Accounts Contacts Events Leads Potentials Tasks Users).concat(modules).uniq
+      @modules = %w(Accounts Contacts Events Leads Potentials Tasks Users Events Cases Calls).concat(modules).uniq
       @module_fields = fields.nil? ? reflect_module_fields : fields
       @ignore_fields = ignore_fields
     end
@@ -126,9 +126,10 @@ module ZohoApi
       check_for_errors(r)
     end
 
-    def some(module_name, index = 1, number_of_records = nil)
+    def some(module_name, index = 1, number_of_records = nil, sortColumn = :id, sortOrder = :asc)
       r = self.class.get(create_url(module_name, 'getRecords'),
                          :query => { :newFormat => 2, :authtoken => @auth_token, :scope => 'crmapi',
+                                     :sortColumnString => sortColumn, :sortOrderString => sortOrder,
                                      :fromIndex => index, :toIndex => number_of_records || NUMBER_OF_RECORDS_TO_GET })
       return nil unless r.response.code == '200'
       check_for_errors(r)
@@ -200,7 +201,8 @@ module ZohoApi
           'Vendors' => %w(vendorid vendorname),
           'Tasks' => %w(taskid),
           'Events' => %w(eventid),
-          'Notes' => %w(notesid)
+          'Notes' => %w(notesid),
+          'Calls' => %w(callid)
       }
       valid_relationships[module_name].index(field.downcase)
     end
