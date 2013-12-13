@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rubyzoho"
-  s.version = "0.1.7.1"
+  s.version = "0.1.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["amalc"]
-  s.date = "2013-02-24"
+  s.date = "2013-12-13"
   s.description = ""
   s.email = ""
   s.extra_rdoc_files = [
@@ -17,9 +17,11 @@ Gem::Specification.new do |s|
     "README.rdoc"
   ]
   s.files = [
+    ".coverall.yml",
     ".document",
     ".rspec",
-    ".rvmrc",
+    ".ruby-gemset",
+    ".ruby-version",
     ".travis.yml",
     "Gemfile",
     "LICENSE.txt",
@@ -27,9 +29,15 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/api_utils.rb",
+    "lib/crm.rb",
     "lib/ruby_zoho.rb",
     "lib/zoho_api.rb",
-    "rubyzoho-0.1.6.gem",
+    "lib/zoho_api_field_utils.rb",
+    "lib/zoho_api_finders.rb",
+    "lib/zoho_crm_crud_methods.rb",
+    "lib/zoho_crm_users.rb",
+    "lib/zoho_crm_utils.rb",
+    "rubyzoho-0.1.7.gem",
     "rubyzoho.gemspec",
     "spec/api_utils_spec.rb",
     "spec/fixtures/sample.pdf",
@@ -45,13 +53,14 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/amalc/rubyzoho"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.24"
+  s.rubygems_version = "1.8.25"
   s.summary = "A set of Ruby classes supporting the ActiveRecord lifecycle for the Zoho API."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<activemodel>, [">= 3.2.11"])
       s.add_runtime_dependency(%q<httmultiparty>, [">= 0.3.8"])
       s.add_runtime_dependency(%q<roxml>, [">= 3.3.1"])
       s.add_runtime_dependency(%q<multipart-post>, [">= 0"])
@@ -64,6 +73,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, [">= 2.12.0"])
       s.add_development_dependency(%q<xml-simple>, [">= 1.1.2"])
     else
+      s.add_dependency(%q<activemodel>, [">= 3.2.11"])
       s.add_dependency(%q<httmultiparty>, [">= 0.3.8"])
       s.add_dependency(%q<roxml>, [">= 3.3.1"])
       s.add_dependency(%q<multipart-post>, [">= 0"])
@@ -77,6 +87,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<xml-simple>, [">= 1.1.2"])
     end
   else
+    s.add_dependency(%q<activemodel>, [">= 3.2.11"])
     s.add_dependency(%q<httmultiparty>, [">= 0.3.8"])
     s.add_dependency(%q<roxml>, [">= 3.3.1"])
     s.add_dependency(%q<multipart-post>, [">= 0"])
